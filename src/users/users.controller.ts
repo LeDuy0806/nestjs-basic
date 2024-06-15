@@ -8,8 +8,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto)
+  async create(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.create(createUserDto)
   }
 
   @Get()
@@ -19,7 +19,7 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return 'This action returns a #' + id + ' user'
+    return this.usersService.findOne('_id', id)
   }
 
   @Patch(':id')
@@ -29,6 +29,6 @@ export class UsersController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id)
+    return this.usersService.remove(id)
   }
 }

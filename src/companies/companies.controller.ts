@@ -1,4 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
+import { ResponseMessage, User } from 'src/decorators/customize'
+import { IUser } from 'src/users/user.interface'
 import { CompaniesService } from './companies.service'
 import { CreateCompanyDto } from './dto/create-company.dto'
 import { UpdateCompanyDto } from './dto/update-company.dto'
@@ -8,27 +10,32 @@ export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
   @Post()
-  create(@Body() createCompanyDto: CreateCompanyDto) {
-    return this.companiesService.create(createCompanyDto)
+  @ResponseMessage('Company created successfully')
+  create(@User() user: IUser, @Body() createCompanyDto: CreateCompanyDto) {
+    return this.companiesService.create(createCompanyDto, user)
   }
 
   @Get()
-  findAll() {
-    return this.companiesService.findAll()
+  @ResponseMessage('Company list retrieved successfully')
+  findAll(@Query('page') currentPage: string, @Query('limit') limit: string, @Query() qs: string) {
+    return this.companiesService.findAll(+currentPage, +limit, qs)
   }
 
   @Get(':id')
+  @ResponseMessage('Company retrieved successfully')
   findOne(@Param('id') id: string) {
-    return this.companiesService.findOne(+id)
+    return this.companiesService.findOne(id)
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
-    return this.companiesService.update(+id, updateCompanyDto)
+  @ResponseMessage('Company updated successfully')
+  update(@Param('id') id: string, @User() user: IUser, @Body() updateCompanyDto: UpdateCompanyDto) {
+    return this.companiesService.update(id, user, updateCompanyDto)
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.companiesService.remove(+id)
+  @ResponseMessage('Company deleted successfully')
+  remove(@Param('id') id: string, @User() user: IUser) {
+    return this.companiesService.remove(id, user)
   }
 }

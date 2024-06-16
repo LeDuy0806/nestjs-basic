@@ -5,6 +5,7 @@ import { ValidationPipe } from '@nestjs/common'
 import { JwtAuthGuard } from './auth/jwt-auth.guard'
 import { AllExceptionFilter } from './common/exceptions/all-exception.filter'
 import { MongoExceptionFilter } from './common/exceptions/mongo-exception.filter'
+import { TransformResponseInterceptor } from './core/transform.interceptor'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestApplication>(AppModule)
@@ -13,7 +14,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe())
 
   const reflector = app.get(Reflector)
-  // app.useGlobalGuards(new JwtAuthGuard(reflector))
+  app.useGlobalInterceptors(new TransformResponseInterceptor(reflector))
+  app.useGlobalGuards(new JwtAuthGuard(reflector))
 
   app.enableCors({
     origin: true,

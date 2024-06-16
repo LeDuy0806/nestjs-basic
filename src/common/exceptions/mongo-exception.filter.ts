@@ -1,5 +1,4 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpStatus } from '@nestjs/common'
-
 import { Response } from 'express'
 import { MongooseError } from 'mongoose'
 
@@ -8,8 +7,6 @@ export class MongoExceptionFilter implements ExceptionFilter {
   catch(exception: MongooseError, host: ArgumentsHost) {
     const ctx = host.switchToHttp()
     const response = ctx.getResponse<Response>()
-
-    console.log(exception.name)
 
     response.status(HttpStatus.BAD_REQUEST).json({
       statusCode: HttpStatus.BAD_REQUEST,

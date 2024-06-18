@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common'
-import { AuthService } from './auth.service'
-import { UsersModule } from 'src/users/users.module'
-import { PassportModule } from '@nestjs/passport'
-import { LocalStrategy } from './passport/local.strategy'
-import { JwtModule } from '@nestjs/jwt'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { JwtStrategy } from './passport/jwt.strategy'
-import ms from 'ms'
+import { JwtModule } from '@nestjs/jwt'
+import { MongooseModule } from '@nestjs/mongoose'
+import { PassportModule } from '@nestjs/passport'
+import { User, UserSchema } from 'src/users/schema/user.schema'
+import { UsersModule } from 'src/users/users.module'
 import { AuthController } from './auth.controller'
+import { AuthService } from './auth.service'
+import { JwtStrategy } from './passport/jwt.strategy'
+import { LocalStrategy } from './passport/local.strategy'
 
 @Module({
   imports: [
@@ -17,10 +18,11 @@ import { AuthController } from './auth.controller'
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
-        signOptions: { expiresIn: ms(configService.get('JWT_EXPIRED_IN')) }
+        signOptions: { expiresIn: configService.get('JWT_EXPIRED_IN') }
       }),
       inject: [ConfigService]
-    })
+    }),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],

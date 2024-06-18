@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
-import { ResponseMessage, User } from 'src/decorators/customize'
+import { ResponseMessage, ReqUser } from 'src/decorators/customize'
 import { IUser } from 'src/users/user.interface'
 import { CompaniesService } from './companies.service'
 import { CreateCompanyDto } from './dto/create-company.dto'
@@ -11,13 +11,13 @@ export class CompaniesController {
 
   @Post()
   @ResponseMessage('Company created successfully')
-  create(@User() user: IUser, @Body() createCompanyDto: CreateCompanyDto) {
+  create(@ReqUser() user: IUser, @Body() createCompanyDto: CreateCompanyDto) {
     return this.companiesService.create(createCompanyDto, user)
   }
 
   @Get()
   @ResponseMessage('Company list retrieved successfully')
-  findAll(@Query('page') currentPage: string, @Query('limit') limit: string, @Query() qs: string) {
+  findAll(@Query('current') currentPage: string, @Query('pageSize') limit: string, @Query() qs: string) {
     return this.companiesService.findAll(+currentPage, +limit, qs)
   }
 
@@ -29,13 +29,13 @@ export class CompaniesController {
 
   @Patch(':id')
   @ResponseMessage('Company updated successfully')
-  update(@Param('id') id: string, @User() user: IUser, @Body() updateCompanyDto: UpdateCompanyDto) {
+  update(@Param('id') id: string, @ReqUser() user: IUser, @Body() updateCompanyDto: UpdateCompanyDto) {
     return this.companiesService.update(id, user, updateCompanyDto)
   }
 
   @Delete(':id')
   @ResponseMessage('Company deleted successfully')
-  remove(@Param('id') id: string, @User() user: IUser) {
+  remove(@Param('id') id: string, @ReqUser() user: IUser) {
     return this.companiesService.remove(id, user)
   }
 }

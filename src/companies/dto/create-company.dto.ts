@@ -1,17 +1,15 @@
 import { IsEmail, IsNotEmpty } from 'class-validator'
 
 export class CreateCompanyDto {
-  // @IsNotEmpty({ message: 'Name must be not empty' })
+  @IsNotEmpty()
   name: string
 
-  // @IsNotEmpty({ message: 'Address must be not empty' })
+  @IsNotEmpty()
   address: string
 
-  // @IsNotEmpty({
-  //   message: 'Description must be not empty'
-  // })
+  @IsNotEmpty()
   description: string
 
-  // @IsNotEmpty({ message: 'Logo must be not empty' })
+  @IsNotEmpty()
   logo: string
 }

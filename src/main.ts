@@ -7,6 +7,7 @@ import { AllExceptionFilter } from './common/exceptions/all-exception.filter'
 import { MongoExceptionFilter } from './common/exceptions/mongo-exception.filter'
 import { TransformResponseInterceptor } from './core/transform.interceptor'
 import cookieParser from 'cookie-parser'
+import { join } from 'path'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestApplication>(AppModule)
@@ -17,6 +18,9 @@ async function bootstrap() {
       whitelist: true
     })
   )
+
+  app.useStaticAssets(join(__dirname, '..', 'public'))
+
   const configService = app.get(ConfigService)
 
   const reflector = app.get(Reflector)

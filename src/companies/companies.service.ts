@@ -4,9 +4,9 @@ import { UpdateCompanyDto } from './dto/update-company.dto'
 import { InjectModel } from '@nestjs/mongoose'
 import { Company, CompanyDocument } from './schema/company.schema'
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose'
-import { IUser } from 'src/users/user.interface'
 import aqp from 'api-query-params'
 import { isEmpty } from 'class-validator'
+import { IUser } from 'src/users/user.interface'
 
 @Injectable()
 export class CompaniesService {

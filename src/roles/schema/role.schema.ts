@@ -1,42 +1,25 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import mongoose from 'mongoose'
 import { HydratedDocument } from 'mongoose'
-import { Role } from 'src/roles/schema/role.schema'
+import { Permission } from 'src/permissions/schema/permission.schema'
 
 // Tạo Document -> tham chiếu xuống MongoDB để tạo ra các document
-export type UserDocument = HydratedDocument<User>
+export type RoleDocument = HydratedDocument<Role>
 
+// 1 user => có 1 role và 1 role => có n permissions => 1 user có n permissions khi sử dụng hệ thống
 @Schema({ timestamps: true })
-export class User {
+export class Role {
   @Prop()
   name: string
 
-  @Prop({ required: true })
-  email: string
-
-  @Prop({ required: true })
-  password: string
+  @Prop()
+  description: string
 
   @Prop()
-  age: number
+  isActive: boolean
 
-  @Prop()
-  gender: string
-
-  @Prop()
-  address: string
-
-  @Prop({ type: Object })
-  company: {
-    _id: mongoose.Schema.Types.ObjectId
-    name: string
-  }
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Role.name })
-  role: mongoose.Schema.Types.ObjectId
-
-  @Prop()
-  refreshToken: string
+  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: Permission.name })
+  permissions: Permission[]
 
   @Prop()
   createdAt: Date
@@ -67,4 +50,4 @@ export class User {
   }
 }
 
-export const UserSchema = SchemaFactory.createForClass(User)
+export const RoleSchema = SchemaFactory.createForClass(Role)

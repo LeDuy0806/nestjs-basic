@@ -9,10 +9,12 @@ import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
 import { JwtStrategy } from './passport/jwt.strategy'
 import { LocalStrategy } from './passport/local.strategy'
+import { RolesModule } from 'src/roles/roles.module'
 
 @Module({
   imports: [
     UsersModule,
+    RolesModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

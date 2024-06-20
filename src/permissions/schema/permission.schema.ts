@@ -1,42 +1,25 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import mongoose from 'mongoose'
 import { HydratedDocument } from 'mongoose'
-import { Role } from 'src/roles/schema/role.schema'
 
 // Tạo Document -> tham chiếu xuống MongoDB để tạo ra các document
-export type UserDocument = HydratedDocument<User>
+export type PermissionDocument = HydratedDocument<Permission>
 
+// Mỗi Permission (quyền hạn) là 1 api
 @Schema({ timestamps: true })
-export class User {
+export class Permission {
   @Prop()
   name: string
 
-  @Prop({ required: true })
-  email: string
-
-  @Prop({ required: true })
-  password: string
+  @Prop()
+  apiPath: string
 
   @Prop()
-  age: number
+  method: string
 
+  //module để gom nhóm các api liên quan đến nhau
   @Prop()
-  gender: string
-
-  @Prop()
-  address: string
-
-  @Prop({ type: Object })
-  company: {
-    _id: mongoose.Schema.Types.ObjectId
-    name: string
-  }
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Role.name })
-  role: mongoose.Schema.Types.ObjectId
-
-  @Prop()
-  refreshToken: string
+  module: string
 
   @Prop()
   createdAt: Date
@@ -67,4 +50,4 @@ export class User {
   }
 }
 
-export const UserSchema = SchemaFactory.createForClass(User)
+export const PermissionSchema = SchemaFactory.createForClass(Permission)

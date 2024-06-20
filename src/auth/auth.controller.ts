@@ -5,10 +5,14 @@ import { Public, ReqUser, ResponseMessage } from 'src/decorators/customize'
 import { RegisterUserDto } from 'src/users/dto/create-user.dto'
 import { Request as RequestExpress, Response } from 'express'
 import { IUser } from 'src/users/user.interface'
+import { RolesService } from 'src/roles/roles.service'
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly roleService: RolesService
+  ) {}
 
   @Post('/login')
   @Public()
@@ -25,10 +29,11 @@ export class AuthController {
     return await this.authService.register(registerUserDto)
   }
 
-  @ResponseMessage(`Get user's infor`)
+  @ResponseMessage(`Get user's info`)
   @Get('/account')
-  //khi gọi endpoint này thì JWT được NestJS giải mã token ở header và gán vào biến req.user (@User)
-  handleGetAccount(@ReqUser() user: IUser) {
+  async handleGetAccount(@ReqUser() user: IUser) {
+    const temp = (await this.roleService.findOne(user.role._id)) as any
+    user.permissions = temp.permissions
     return { user }
   }
 
@@ -48,8 +53,9 @@ export class AuthController {
   ) {
     return this.authService.logout(user, response)
   }
+
   @Get('/me')
-  getProfile(@Request() req) {
-    return req.user
+  getProfile(@ReqUser() user: IUser) {
+    return user
   }
 }

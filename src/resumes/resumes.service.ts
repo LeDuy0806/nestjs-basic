@@ -121,7 +121,22 @@ export class ResumesService {
     return this.resumeModel.softDelete({ _id: id })
   }
 
-  getResumeByUser(user: IUser) {
-    return this.resumeModel.findOne({ userId: user._id })
+  async getResumeByUser(user: IUser) {
+    return await this.resumeModel
+      .find({
+        userId: user._id
+      })
+      .sort('-createdAt')
+      .populate([
+        //populate: để join với collection khác để lấy thêm thông tin
+        {
+          path: 'companyId', //path: để chỉ ra field (collection) muốn join
+          select: { name: 1 }
+        },
+        {
+          path: 'jobId',
+          select: { name: 1 }
+        }
+      ])
   }
 }

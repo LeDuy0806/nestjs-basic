@@ -4,7 +4,8 @@ import { CreateSubscriberDto } from './dto/create-subscriber.dto'
 import { UpdateSubscriberDto } from './dto/update-subscriber.dto'
 import { ResponseMessage, SkipCheckPermission, ReqUser } from 'src/decorators/customize'
 import { IUser } from 'src/users/user.interface'
-
+import { ApiTags } from '@nestjs/swagger'
+@ApiTags('subscribers')
 @Controller('subscribers')
 @SkipCheckPermission()
 export class SubscribersController {

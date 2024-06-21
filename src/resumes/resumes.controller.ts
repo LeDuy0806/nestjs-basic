@@ -4,7 +4,9 @@ import { CreateResumeDto, CreateUserCvDto } from './dto/create-resume.dto'
 import { UpdateResumeDto } from './dto/update-resume.dto'
 import { IUser } from 'src/users/user.interface'
 import { ReqUser, ResponseMessage } from 'src/decorators/customize'
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags('resumes')
 @Controller('resumes')
 export class ResumesController {
   constructor(private readonly resumesService: ResumesService) {}

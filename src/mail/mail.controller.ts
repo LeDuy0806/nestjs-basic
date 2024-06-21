@@ -7,7 +7,9 @@ import { Subscriber, SubscriberDocument } from 'src/subscribers/schema/subscribe
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose'
 import { Job, JobDocument } from 'src/jobs/schema/job.schema'
 import { Cron, CronExpression } from '@nestjs/schedule'
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags('mail')
 @Controller('mail')
 export class MailController {
   private readonly logger = new Logger(MailController.name)
